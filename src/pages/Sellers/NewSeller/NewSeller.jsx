@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { sellersService } from '../../../services/sellersService';
+import { sellersService } from '../../../firebase/services/sellersService';
 import Navbar from '../../components/Navbar/Navbar';
 import './NewSeller.css';
 
