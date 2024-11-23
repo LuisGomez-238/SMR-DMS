@@ -1,0 +1,41 @@
+.seller-info {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.seller-name {
+    display: block;
+    font-weight: 500;
+    color: #374151;
+}
+
+.seller-location {
+    display: block;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem;
+    background: #f8fafc;
+    border-radius: 0.5rem;
+    color: #64748b;
+}
+
+.inventory-specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+}
+
+.inventory-specs span {
+    font-size: 0.875rem;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+} 

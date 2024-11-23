@@ -1,0 +1,253 @@
+/* Page Layout */
+.new-seller-container {
+    padding: 6rem 2rem 2rem 2rem;
+    min-height: 100vh;
+    background-color: #f8fafc;
+    width: 100%;
+}
+
+.main-content {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.page-header {
+    max-width: 1400px;
+    margin: 0 auto 2rem auto;
+    padding: 0 1rem;
+}
+
+.page-header h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.page-header p {
+    color: #64748b;
+    font-size: 0.9375rem;
+}
+
+/* ID Preview */
+.id-preview {
+    max-width: 1400px;
+    margin: 0 auto 1.5rem auto;
+    padding: 1rem 1.5rem;
+    background-color: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 0.75rem;
+}
+
+/* Form Container */
+.form-container {
+    background: white;
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.onboarding-form {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* Form Sections */
+.form-section {
+    padding: 2rem;
+    border-bottom: 1px solid #e2e8f0;
+    background: white;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+}
+
+.form-section h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Form Grid Layout */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Form Elements */
+label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #334155;
+}
+
+input,
+select {
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    font-size: 0.9375rem;
+    color: #1e293b;
+    background-color: white;
+    transition: all 0.2s ease;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+input:hover:not(:focus),
+select:hover:not(:focus) {
+    border-color: #cbd5e1;
+}
+
+/* Form Actions */
+.form-actions {
+    padding: 1.5rem 2rem;
+    background-color: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    min-width: 140px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: white;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background-color: #f8fafc;
+    border-color: #cbd5e1;
+    color: #1e293b;
+}
+
+/* Error States */
+.error-message {
+    max-width: 1400px;
+    margin: 0 auto 1.5rem auto;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    padding: 1rem 1.5rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+input.error,
+select.error {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+}
+
+.error-text {
+    color: #dc2626;
+    font-size: 0.8125rem;
+    margin-top: 0.25rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .new-seller-container {
+        padding: 5rem 0 0 0;
+    }
+    
+    .page-header,
+    .id-preview,
+    .error-message {
+        margin-left: 1.5rem;
+        margin-right: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .new-seller-container {
+        padding-top: 4.5rem;
+    }
+    
+    .page-header,
+    .id-preview,
+    .error-message {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+    
+    .form-actions {
+        flex-direction: column-reverse;
+        padding: 1.25rem;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    .new-seller-container {
+        padding-top: 4rem;
+    }
+    
+    .page-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .form-section {
+        padding: 1.25rem;
+    }
+}
