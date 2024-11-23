@@ -29,8 +29,8 @@ export default defineConfig({
           ],
           // Features chunk
           features: [
-            './src/services/inventoryService.js',
-            './src/services/sellersService.js',
+            './src/firebase/services/inventoryService.js',
+            './src/firebase/services/sellersService.js',
             './src/firebase/config.js'
           ]
         }
