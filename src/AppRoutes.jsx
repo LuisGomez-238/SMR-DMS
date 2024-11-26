@@ -36,15 +36,21 @@ const PrivateRoute = ({ children }) => {
 };
 
 const AppRoutes = () => {
+    const { currentUser } = useAuth();
+
     return (
         <Routes>
             {/* Public Routes */}
             <Route 
                 path="/login" 
                 element={
-                    <Suspense fallback={<LoadingSpinner />}>
-                        <Login />
-                    </Suspense>
+                    currentUser ? (
+                        <Navigate to="/dashboard" />
+                    ) : (
+                        <Suspense fallback={<LoadingSpinner />}>
+                            <Login />
+                        </Suspense>
+                    )
                 } 
             />
             
