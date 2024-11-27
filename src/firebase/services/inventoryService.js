@@ -27,32 +27,27 @@ export const inventoryService = {
 
     async addInventory(sellerId, inventoryData) {
         try {
-            // First verify the seller exists
+            // Verify the seller exists
             const sellerRef = doc(db, 'sellers', sellerId);
             const sellerSnap = await getDoc(sellerRef);
-
             if (!sellerSnap.exists()) {
                 throw new Error('Seller not found');
             }
 
             const sellerData = sellerSnap.data();
 
-            // Convert image blobs to base64
+            // Process images
             const processedImages = await Promise.all(
                 inventoryData.images.map(async (img, index) => {
-                    // If the image is already a string (base64 or URL), use it directly
-                    if (typeof img.preview === 'string' && !img.preview.startsWith('blob:')) {
+                    if (typeof img.url === 'string' && !img.url.startsWith('blob:')) {
                         return {
-                            url: img.preview,
+                            url: img.url,
                             isPrimary: index === 0
                         };
                     }
 
-                    // Convert blob to base64
-                    const base64String = await this.blobToBase64(
-                        await fetch(img.preview).then(r => r.blob())
-                    );
-
+                    // Convert blob to base64 if necessary
+                    const base64String = await this.blobToBase64(await fetch(img.preview).then(r => r.blob()));
                     return {
                         url: base64String,
                         isPrimary: index === 0
@@ -60,13 +55,10 @@ export const inventoryService = {
                 })
             );
 
-            // Prepare inventory data - preserve all fields from the form
+            // Prepare inventory data
             const inventory = {
-                ...inventoryData,  // This preserves all form fields
-                images: inventoryData.images.map(img => ({
-                    url: img.url, // Use the S3 URL
-                    isPrimary: img.isPrimary || false
-                })),
+                ...inventoryData,
+                images: processedImages,
                 sellerId,
                 sellerInfo: {
                     businessName: sellerData.businessName,
@@ -80,7 +72,7 @@ export const inventoryService = {
                 createdAt: Timestamp.now(),
                 updatedAt: Timestamp.now()
             };
-            
+
             // Add to Firestore
             const docRef = await addDoc(collection(db, 'inventory'), inventory);
             console.log('Added inventory document:', docRef.id);

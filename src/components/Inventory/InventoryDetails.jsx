@@ -169,6 +169,13 @@ const InventoryDetails = () => {
         }
     };
 
+    const printDocument = (url) => {
+        const printWindow = window.open(url, '_blank');
+        printWindow.onload = () => {
+            printWindow.print();
+        };
+    };
+
     if (loading) return <div className="loading">Loading inventory details...</div>;
     if (error) return <div className="error-message">{error}</div>;
     if (!inventory) return <div className="error-message">Inventory not found</div>;
@@ -243,6 +250,26 @@ const InventoryDetails = () => {
                                 </div>
                             ))}
                         </div>
+                           {/* Documents Section */}
+                <div className="documents-section">
+                    <h2>Uploaded Documents</h2>
+                    {inventory.documents && inventory.documents.length > 0 ? (
+                        <ul className="documents-list">
+                            {inventory.documents.map((doc, index) => (
+                                <li key={index} className="document-item">
+                                    <a href={doc.url} target="_blank" rel="noopener noreferrer">
+                                        {doc.name}
+                                    </a>
+                                    <button onClick={() => printDocument(doc.url)} className="print-button">
+                                        Print
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>No documents uploaded.</p>
+                    )}
+                </div>
                     </div>
 
                     {/* Details Section */}

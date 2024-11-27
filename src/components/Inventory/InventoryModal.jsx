@@ -95,6 +95,7 @@ const EQUIPMENT_PRESETS = {
 
 const MAX_IMAGES = 20;
 const MAX_FILE_SIZE = 150 * 1024; // 150KB
+const MAX_DOCUMENTS = 20;
 
 const TOOLTIPS = {
     year: 'Enter the manufacturing year',
@@ -171,6 +172,7 @@ const InventoryModal = ({ onClose, sellerId, onSave }) => {
     const [previewImages, setPreviewImages] = useState([]);
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
+    const [uploadedDocuments, setUploadedDocuments] = useState([]);
 
     useEffect(() => {
         console.log('InventoryModal Auth State:', {
@@ -779,6 +781,7 @@ const InventoryModal = ({ onClose, sellerId, onSave }) => {
             const inventoryData = {
                 ...formData,
                 images: previewImages,
+                documents: uploadedDocuments,
                 sellerId,
                 userId: currentUser.uid,
                 category: formData.category,
@@ -808,6 +811,52 @@ const InventoryModal = ({ onClose, sellerId, onSave }) => {
             });
         };
     }, [previewImages]);
+
+    const handleDocumentUpload = async (e) => {
+        const files = Array.from(e.target.files);
+
+        if (uploadedDocuments.length + files.length > MAX_DOCUMENTS) {
+            setErrors(prev => ({
+                ...prev,
+                documents: `Maximum ${MAX_DOCUMENTS} documents allowed`
+            }));
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const processedFiles = await Promise.all(files.map(async (file) => {
+                const fileName = `${Date.now()}_${file.name}`;
+                const params = {
+                    Bucket: import.meta.env.VITE_AWS_BUCKET_NAME,
+                    Key: fileName,
+                    Body: file,
+                    ContentType: file.type,
+                };
+
+                // Upload the file to S3
+                await s3.putObject(params); // Use putObject for v3
+
+                // Create a document URL
+                const documentUrl = `https://${import.meta.env.VITE_AWS_BUCKET_NAME}.s3.amazonaws.com/${fileName}`; // S3 URL
+                return {
+                    url: documentUrl,
+                    name: file.name // Store the file name for display
+                };
+            }));
+
+            setUploadedDocuments(prev => [...prev, ...processedFiles]);
+            setErrors(prev => ({ ...prev, documents: '' }));
+        } catch (error) {
+            console.error('Error uploading documents:', error);
+            setErrors(prev => ({
+                ...prev,
+                documents: 'Error uploading documents. Please try again.'
+            }));
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="modal-overlay">
@@ -1184,6 +1233,40 @@ const InventoryModal = ({ onClose, sellerId, onSave }) => {
                                             {index === 0 && (
                                                 <span className="primary-badge">Primary</span>
                                             )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="form-section document-section">
+                            <h3>Documents</h3>
+                            <div className="document-upload-container">
+                                <input
+                                    type="file"
+                                    accept=".pdf,.doc,.docx"
+                                    multiple
+                                    onChange={handleDocumentUpload}
+                                    id="document-upload"
+                                    hidden
+                                    disabled={uploadedDocuments.length >= MAX_DOCUMENTS}
+                                />
+                                <label 
+                                    htmlFor="document-upload" 
+                                    className={`upload-button ${loading ? 'loading' : ''} ${uploadedDocuments.length >= MAX_DOCUMENTS ? 'disabled' : ''}`}
+                                >
+                                    Upload Documents ({uploadedDocuments.length}/{MAX_DOCUMENTS})
+                                </label>
+
+                                {errors.documents && (
+                                    <div className="error-message">{errors.documents}</div>
+                                )}
+
+                                <div className="document-preview-grid">
+                                    {uploadedDocuments.map((doc, index) => (
+                                        <div key={index} className="document-preview">
+                                            <a href={doc.url} target="_blank" rel="noopener noreferrer">{doc.name}</a>
+                                            <button onClick={() => removeDocument(index)}>Remove</button>
                                         </div>
                                     ))}
                                 </div>
