@@ -5,6 +5,8 @@ import imageCompression from 'browser-image-compression';
 import FormField from '../FormFields/FormField';
 import './InventoryModal.css';
 import { useAuth } from '../../contexts/AuthContext';
+import { s3 } from '../../firebase/awsConfig'; // Ensure this is correctly set up
+
 
 const EQUIPMENT_CATEGORIES = {
     TRUCK: 'truck',
@@ -666,26 +668,33 @@ const InventoryModal = ({ onClose, sellerId, onSave }) => {
         setLoading(true);
         try {
             const processedFiles = await Promise.all(files.map(async (file) => {
-                // Compress image
-                const compressedFile = await imageCompression(file, {
-                    maxSizeMB: 1,
-                    maxWidthOrHeight: 1920
-                });
+                const fileName = `${Date.now()}_${file.name}`;
+                const params = {
+                    Bucket: import.meta.env.VITE_AWS_BUCKET_NAME, // Use Vite's environment variable syntax
+                    Key: fileName,
+                    Body: file,
+                    ContentType: file.type,
+                };
 
-                // Create preview URL
+                // Upload the file to S3
+                await s3.putObject(params); // Use putObject for v3
+
+                // Create a preview URL
+                const previewUrl = URL.createObjectURL(file);
                 return {
-                    file: compressedFile,
-                    preview: URL.createObjectURL(compressedFile)
+                    file: file,
+                    preview: previewUrl,
+                    url: `https://${import.meta.env.VITE_AWS_BUCKET_NAME}.s3.amazonaws.com/${fileName}` // S3 URL
                 };
             }));
 
             setPreviewImages(prev => [...prev, ...processedFiles]);
             setErrors(prev => ({ ...prev, images: '' }));
         } catch (error) {
-            console.error('Error processing images:', error);
+            console.error('Error uploading images:', error);
             setErrors(prev => ({
                 ...prev,
-                images: 'Error processing images. Please try again.'
+                images: 'Error uploading images. Please try again.'
             }));
         } finally {
             setLoading(false);

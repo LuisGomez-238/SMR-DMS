@@ -63,7 +63,10 @@ export const inventoryService = {
             // Prepare inventory data - preserve all fields from the form
             const inventory = {
                 ...inventoryData,  // This preserves all form fields
-                images: processedImages,
+                images: inventoryData.images.map(img => ({
+                    url: img.url, // Use the S3 URL
+                    isPrimary: img.isPrimary || false
+                })),
                 sellerId,
                 sellerInfo: {
                     businessName: sellerData.businessName,
