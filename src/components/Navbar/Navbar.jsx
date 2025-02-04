@@ -1,6 +1,6 @@
 // Navbar.js
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { 
     HomeIcon,
     UsersIcon,
@@ -11,9 +11,13 @@ import {
     Bars3Icon,
     XMarkIcon
 } from '@heroicons/react/24/outline';
+import { FaUsers, FaHome, FaTruck, FaFileInvoiceDollar } from 'react-icons/fa';
+import { useAuth } from '../../contexts/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {
+    const { currentUser, logout } = useAuth();
+    const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const navItems = [
@@ -28,6 +32,15 @@ const Navbar = () => {
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
         document.body.classList.toggle('menu-open', !isMenuOpen);
+    };
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            navigate('/login');
+        } catch (error) {
+            console.error('Failed to log out:', error);
+        }
     };
 
     return (
@@ -63,6 +76,23 @@ const Navbar = () => {
                         </NavLink>
                     );
                 })}
+                
+                {/* Add Buyers link - place it where appropriate in your navigation */}
+                <NavLink 
+                    to="/buyers" 
+                    className={({ isActive }) => 
+                        isActive ? 'nav-link active' : 'nav-link'
+                    }
+                >
+                    <FaUsers className="nav-icon" />
+                    <span>Buyers</span>
+                </NavLink>
+
+                {currentUser && (
+                    <button onClick={handleLogout} className="logout-button">
+                        Logout
+                    </button>
+                )}
             </div>
         </nav>
     );

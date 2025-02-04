@@ -1,49 +1,42 @@
 import React, { Suspense, useEffect } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
 import { GlobalProvider } from './contexts/GlobalContext';
 import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
+import Navbar from './components/Navbar/Navbar';
+import AppRoutes from './AppRoutes';
+import { useLocation } from 'react-router-dom';
 import './App.css';
 
 // Lazy load components
-const Navbar = React.lazy(() => import('./components/Navbar/Navbar'));
-const AppRoutes = React.lazy(() => import('./AppRoutes'));
+const AppRoutesComponent = React.lazy(() => import('./AppRoutes'));
 
-// Create a wrapper component that handles the conditional rendering
+// Create a separate component for the app content
 const AppContent = () => {
-  const { currentUser } = useAuth();
-
-  // Add debug logging
-  useEffect(() => {
-    console.log('Auth State Changed:', {
-      isAuthenticated: !!currentUser,
-      userDetails: currentUser ? {
-        uid: currentUser.uid,
-        email: currentUser.email
-      } : 'Not authenticated'
-    });
-  }, [currentUser]);
+  const location = useLocation();
+  const isFinanceApplication = location.pathname.includes('finance-application');
 
   return (
-    <div className="app-container">
-      <Suspense fallback={<LoadingSpinner />}>
-        {currentUser && <Navbar />}
+    <div className="app">
+      {!isFinanceApplication && <Navbar />}
+      <main className="main-content">
         <AppRoutes />
-      </Suspense>
+      </main>
     </div>
   );
 };
 
-function App() {
+// Main App component
+const App = () => {
   return (
-    <AuthProvider>
-      <GlobalProvider>
-        <Router>
+    <BrowserRouter>
+      <AuthProvider>
+        <GlobalProvider>
           <AppContent />
-        </Router>
-      </GlobalProvider>
-    </AuthProvider>
+        </GlobalProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;

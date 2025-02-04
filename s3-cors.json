@@ -1,0 +1,24 @@
+{
+    "CORSRules": [
+        {
+            "AllowedHeaders": [
+                "*"
+            ],
+            "AllowedMethods": [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE",
+                "HEAD"
+            ],
+            "AllowedOrigins": [
+                "http://localhost:5173",
+                "https://smr-dms.vercel.app"
+            ],
+            "ExposeHeaders": [
+                "ETag"
+            ],
+            "MaxAgeSeconds": 3600
+        }
+    ]
+} 

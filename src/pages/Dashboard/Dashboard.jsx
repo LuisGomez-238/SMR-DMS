@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useGlobal } from '../../contexts/GlobalContext';
 import { 
@@ -12,6 +12,7 @@ import {
     UserGroupIcon,
     ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline';
+import { FaUsers } from 'react-icons/fa';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -63,6 +64,12 @@ const Dashboard = () => {
             }).format(stats.totalSales),
             icon: CurrencyDollarIcon,
             color: 'purple'
+        },
+        {
+            title: 'Total Buyers',
+            value: stats.totalBuyers,
+            icon: FaUsers,
+            color: 'buyers'
         }
     ];
 
@@ -84,6 +91,12 @@ const Dashboard = () => {
             icon: DocumentPlusIcon,
             path: '/deals/new',
             color: 'purple'
+        },
+        {
+            title: 'Add New Buyer',
+            icon: FaUsers,
+            path: '/buyers/new',
+            color: 'buyers'
         }
     ];
 
@@ -124,16 +137,16 @@ const Dashboard = () => {
                 {/* Quick Actions */}
                 <section className="quick-actions">
                     <h2>Quick Actions</h2>
-                    <div className="action-grid">
+                    <div className="action-buttons">
                         {quickActions.map((action, index) => (
-                            <button
+                            <Link
                                 key={index}
+                                to={action.path}
                                 className={`action-button ${action.color}`}
-                                onClick={() => navigate(action.path)}
                             >
                                 <action.icon className="action-icon" />
                                 <span>{action.title}</span>
-                            </button>
+                            </Link>
                         ))}
                     </div>
                 </section>
