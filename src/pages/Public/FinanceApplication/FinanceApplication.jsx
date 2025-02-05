@@ -3,6 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { PDFDocument } from 'pdf-lib';
 import { format } from 'date-fns';
 import { buyersService } from '../../../firebase/services/buyersService';
+import { s3 } from '../../../firebase/awsConfig';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { addDoc, collection, updateDoc, doc } from 'firebase/firestore';
+import { db } from '../../../firebase/config';
 import './FinanceApplication.css';
 
 const S3_PDF_URL = 'https://smr-dms.s3.amazonaws.com/templates/BuyerForms.pdf';
@@ -133,35 +137,80 @@ const FinanceApplication = () => {
         }
     };
 
+    const uploadToS3 = async (file, buyerId, type) => {
+        const fileExtension = file.name.split('.').pop();
+        const uniqueFileName = `finance-applications/${buyerId}/${type}-${Date.now()}.${fileExtension}`;
+        
+        const params = {
+            Bucket: 'smr-dms',
+            Key: uniqueFileName,
+            Body: file,
+            ContentType: file.type
+        };
+
+        try {
+            await s3.send(new PutObjectCommand(params));
+            return `https://smr-dms.s3.amazonaws.com/${uniqueFileName}`;
+        } catch (error) {
+            console.error('Error uploading to S3:', error);
+            throw error;
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
         setErrors({});
 
         try {
-            // Fill the PDF form
+            // Fill the PDF form first
             const filledPdfFile = await fillPdfForm(formData);
+            
+            // Create a temporary ID for the buyer
+            const tempId = Date.now().toString();
+            
+            // Upload all documents to S3 first
+            const pdfUrl = await uploadToS3(filledPdfFile, tempId, 'BuyerForms');
+            const uploadPromises = documents.map(doc => 
+                uploadToS3(doc.file, tempId, doc.type)
+            );
+            const uploadedUrls = await Promise.all(uploadPromises);
 
-            // Create buyer record first
-            const buyerId = await buyersService.createBuyer({
-                ...formData,
-                status: 'pending' // Mark as pending for finance applications
-            });
-
-            // Add the filled PDF to documents
-            const allDocuments = [
-                ...documents,
-                { file: filledPdfFile, type: 'BuyerForms' }
+            // Prepare the documents array
+            const documentsList = [
+                { type: 'BuyerForms', url: pdfUrl },
+                ...documents.map((doc, index) => ({
+                    type: doc.type,
+                    url: uploadedUrls[index]
+                }))
             ];
 
-            // Upload all documents including the filled PDF
-            for (const doc of allDocuments) {
-                try {
-                    await buyersService.uploadDocument(buyerId, doc.file, doc.type);
-                } catch (uploadError) {
-                    console.error('Error uploading document:', doc.file.name, uploadError);
-                }
-            }
+            // Create the buyer document with all data including documents
+            const buyerData = {
+                businessName: formData.buyerCompanyName || '',
+                contactName: formData.buyerName || '',
+                email: formData.buyerEmail || '',
+                phone: formData.buyerPhone || '',
+                businessType: 'company',
+                status: 'pending',
+                address: formData.buyerAddress || '',
+                city: formData.buyerCity || '',
+                state: formData.buyerState || '',
+                zipCode: formData.buyerZip || '',
+                cdlNumber: formData.buyerCDLNumber || '',
+                cdlState: formData.buyerCDLState || '',
+                ein: formData.buyerEIN || '',
+                ssn: formData.buyerSS || '',
+                yearsDriving: formData.buyerYearsDriving || '',
+                yearsOwner: formData.buyerYearsOwner || '',
+                fleetSize: formData.buyerFleetSize || '',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                documents: documentsList // Include documents array in initial creation
+            };
+
+            // Create the Firestore document with all data at once
+            await addDoc(collection(db, 'buyers'), buyerData);
 
             navigate('/finance-application-success');
         } catch (error) {
