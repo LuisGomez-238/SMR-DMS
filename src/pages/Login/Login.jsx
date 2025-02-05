@@ -106,18 +106,6 @@ const Login = () => {
                             : (isRegistering ? 'Create Account' : 'Sign In')}
                     </button>
                 </form>
-
-                <button 
-                    className="toggle-mode-button"
-                    onClick={() => {
-                        setIsRegistering(!isRegistering);
-                        setError('');
-                    }}
-                >
-                    {isRegistering 
-                        ? 'Already have an account? Sign In' 
-                        : 'Need an account? Create one'}
-                </button>
             </div>
         </div>
     );
