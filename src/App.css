@@ -214,13 +214,13 @@ button[type="submit"]:focus-visible {
 }
 
 .main-content {
-    padding-top: 70px; /* Height of navbar */
-    min-height: calc(100vh - 70px);
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 250px; /* Adjust based on your navbar width */
+    min-height: 100vh;
+    transition: padding 0.3s ease;
+}
+
+.main-content.no-navbar {
+    padding-left: 0;
 }
 
 @media (max-width: 768px) {

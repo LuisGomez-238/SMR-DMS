@@ -20,27 +20,9 @@ import NotFound from './pages/NotFound/NotFound';
 import Buyers from './pages/Buyers/Buyers';
 import BuyerDetails from './pages/Buyers/BuyerDetails/BuyerDetails';
 import NewBuyer from './pages/Buyers/NewBuyer/NewBuyer';
-
+import Login from './pages/Login/Login';
 // Lazy load all pages
-const Login = React.lazy(() => import('./pages/Login/Login'));
 const DealSubmission = React.lazy(() => import('./pages/Deals/DealSubmission'));
-
-// Protected Route Component with loading state
-const PrivateRouteComponent = ({ children }) => {
-    const { currentUser, loading } = useAuth();
-
-    if (loading) {
-        return <LoadingSpinner />;
-    }
-
-    return currentUser ? (
-        <Suspense fallback={<LoadingSpinner />}>
-            {children}
-        </Suspense>
-    ) : (
-        <Navigate to="/login" />
-    );
-};
 
 const AppRoutes = () => {
     const { currentUser } = useAuth();
@@ -48,6 +30,7 @@ const AppRoutes = () => {
     return (
         <Routes>
             {/* Public Routes */}
+            <Route path="/login" element={<Login />} />
             <Route path="/finance-application" element={<FinanceApplication />} />
             <Route path="/finance-application/:token" element={<FinanceApplication />} />
             <Route path="/finance-application-success" element={<FinanceApplicationSuccess />} />

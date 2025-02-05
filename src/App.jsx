@@ -14,12 +14,15 @@ const AppRoutesComponent = React.lazy(() => import('./AppRoutes'));
 // Create a separate component for the app content
 const AppContent = () => {
   const location = useLocation();
-  const isFinanceApplication = location.pathname.includes('finance-application');
+  
+  // Hide navbar on login and finance application pages
+  const hideNavbar = location.pathname === '/login' || 
+                    location.pathname.includes('finance-application');
 
   return (
     <div className="app">
-      {!isFinanceApplication && <Navbar />}
-      <main className="main-content">
+      {!hideNavbar && <Navbar />}
+      <main className={`main-content ${hideNavbar ? 'no-navbar' : ''}`}>
         <AppRoutes />
       </main>
     </div>
