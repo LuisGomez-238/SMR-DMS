@@ -89,7 +89,7 @@ const Sellers = () => {
     });
 
     return (
-        <>
+        <div className='sellers-container'>
             <Navbar />
             <div className="dashboard-container">
                 <main className="main-content">
@@ -109,7 +109,6 @@ const Sellers = () => {
 
                     <div className="sellers-controls">
                         <div className="search-bar">
-                            <MagnifyingGlassIcon className="search-icon" />
                             <input
                                 type="text"
                                 placeholder="Search sellers..."
@@ -224,7 +223,7 @@ const Sellers = () => {
                     </div>
                 </main>
             </div>
-        </>
+        </div>
     );
 };
 

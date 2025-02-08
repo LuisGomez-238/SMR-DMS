@@ -2,6 +2,7 @@
     min-height: calc(100vh - 70px);
     padding-top: 70px;
     background-color: #f8fafc;
+    width: 100vw;
 }
 
 .seller-details-container {

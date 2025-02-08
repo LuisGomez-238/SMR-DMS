@@ -1,3 +1,21 @@
+.inventory-container {  
+    width: 100vw;
+    background-color: #f8fafc;
+    overflow: hidden;
+}
+
+.main-container {
+    height: 100vh;
+    width: 100vw;
+    background-color: #f8fafc;
+}
+
+.inventory-header {
+    width: 90vw;
+    margin-left: 2rem;
+    margin-top: 2rem;
+}
+
 .seller-info {
     margin-top: 0.5rem;
     padding-top: 0.5rem;
@@ -52,7 +70,7 @@
 
 .search-bar {
     height: 2rem;
-    width: 12rem;
+    width: 20rem;
     margin-top: 1rem;
 }
 
@@ -66,7 +84,11 @@
 
 .inventory-controls {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90vw;
 }
+
 
 .inventory-grid {
     display: flex;

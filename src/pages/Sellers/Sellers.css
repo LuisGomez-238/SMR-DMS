@@ -1,9 +1,17 @@
+.sellers-container {
+        background-color: #f8fafc;
+        width: 100vw;
+        height: 100vh;
+}
+
 /* Header Styles */
 .sellers-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    width: 90vw;
+    margin-top: 2rem;
 }
 
 .header-title h1 {
@@ -25,16 +33,12 @@
     align-items: center;
     gap: 1rem;
     margin-bottom: 1.5rem;
-}
-
-.search-bar {
-    flex: 1;
-    max-width: 400px;
-    position: relative;
+    width: 90vw;
+    margin-left: 2rem;
 }
 
 .search-bar input {
-    width: 100%;
+    width: 1000px;
     padding: 0.75rem 1rem 0.75rem 2.5rem;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
@@ -168,7 +172,7 @@
 }
 
 table {
-    width: 100%;
+    width: 90vw;
     border-collapse: collapse;
 }
 

@@ -9,6 +9,7 @@ import {
     limit 
 } from 'firebase/firestore';
 import { useAuth } from './AuthContext';
+import { buyersService } from '../firebase/services/buyersService';
 
 const GlobalContext = createContext();
 
@@ -27,7 +28,8 @@ export function GlobalProvider({ children }) {
         activeListings: 0,
         pendingDeals: 0,
         completedDeals: 0,
-        totalSales: 0
+        totalSales: 0,
+        totalBuyers: 0
     });
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -42,7 +44,8 @@ export function GlobalProvider({ children }) {
                     activeListings: 0,
                     pendingDeals: 0,
                     completedDeals: 0,
-                    totalSales: 0
+                    totalSales: 0,
+                    totalBuyers: 0
                 };
 
                 // Simple query to test connection
@@ -74,6 +77,10 @@ export function GlobalProvider({ children }) {
                         statsData.totalSales += deal.amount || 0;
                     }
                 });
+
+                const totalBuyers = await buyersService.getAllBuyers();
+                
+                statsData.totalBuyers = totalBuyers;
 
                 return statsData;
             } catch (err) {

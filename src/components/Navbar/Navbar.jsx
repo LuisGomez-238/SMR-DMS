@@ -34,14 +34,6 @@ const Navbar = () => {
         document.body.classList.toggle('menu-open', !isMenuOpen);
     };
 
-    const handleLogout = async () => {
-        try {
-            await logout();
-            navigate('/login');
-        } catch (error) {
-            console.error('Failed to log out:', error);
-        }
-    };
 
     return (
         <nav className="navbar">
@@ -87,12 +79,6 @@ const Navbar = () => {
                     <FaUsers className="nav-icon" />
                     <span>Buyers</span>
                 </NavLink>
-
-                {currentUser && (
-                    <button onClick={handleLogout} className="logout-button">
-                        Logout
-                    </button>
-                )}
             </div>
         </nav>
     );

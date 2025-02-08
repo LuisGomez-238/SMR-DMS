@@ -14,7 +14,6 @@ import {
 } from '@heroicons/react/24/outline';
 import { FaUsers } from 'react-icons/fa';
 import './Dashboard.css';
-
 const Dashboard = () => {
     const navigate = useNavigate();
     const { currentUser, logout } = useAuth();
@@ -41,7 +40,7 @@ const Dashboard = () => {
         {
             title: 'Total Sellers',
             value: stats.totalSellers,
-            icon: UserGroupIcon,
+            icon: FaUsers,
             color: 'blue'
         },
         {
@@ -69,7 +68,7 @@ const Dashboard = () => {
             title: 'Total Buyers',
             value: stats.totalBuyers,
             icon: FaUsers,
-            color: 'buyers'
+            color: 'orange'
         }
     ];
 
@@ -96,15 +95,15 @@ const Dashboard = () => {
             title: 'Add New Buyer',
             icon: FaUsers,
             path: '/buyers/new',
-            color: 'buyers'
+            color: 'orange'
         }
     ];
 
     return (
-        <div className="dashboard">
-            <header className="dashboard-header">
-                <div className="header-content">
-                    <div>
+        <>
+            <div className="dashboard">
+                <header className="dashboard-header">
+                    <div className="header-title">
                         <h1>Dashboard</h1>
                         <p>Welcome back, {currentUser?.email}</p>
                     </div>
@@ -115,8 +114,7 @@ const Dashboard = () => {
                         <ArrowRightOnRectangleIcon className="icon" />
                         Logout
                     </button>
-                </div>
-            </header>
+                </header>
 
             <main className="dashboard-content">
                 {/* Stats Overview */}
@@ -133,7 +131,7 @@ const Dashboard = () => {
                         </div>
                     ))}
                 </section>
-
+            <div className="quick-actions-container">
                 {/* Quick Actions */}
                 <section className="quick-actions">
                     <h2>Quick Actions</h2>
@@ -175,8 +173,10 @@ const Dashboard = () => {
                         )}
                     </div>
                 </section>
+            </div>
             </main>
         </div>
+        </>
     );
 };
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { buyersService } from '../../firebase/services/buyersService';
-import Navbar from '../../components/Navbar/Navbar';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import './Buyers.css';
 
@@ -61,7 +60,6 @@ const Buyers = () => {
 
     return (
         <>
-            <Navbar />
             <div className="buyers-container">
                 <div className="buyers-header">
                     <div className="header-content">

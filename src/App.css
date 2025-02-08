@@ -1,10 +1,4 @@
-/* Reset default margins and padding */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+/* Root variables */
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
@@ -16,6 +10,22 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    --navbar-width: 250px;
+    --navbar-width-tablet: 200px;
+    --content-max-width: 1440px;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
+
+/* Reset default margins and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
@@ -73,31 +83,52 @@ button:focus-visible {
 .navbar {
     position: fixed;
     top: 0;
-    width: 100%;
-    background-color: #333;
-    padding: 10px;
-    color: white;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 var(--spacing-lg);
+}
+
+.navbar-content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    max-width: var(--content-max-width);
+    width: 100%;
+    margin: 0 auto;
 }
 
 .navbar ul {
-    list-style-type: none;
     display: flex;
-    gap: 20px;
-    padding: 0;
+    align-items: center;
+    gap: var(--spacing-md);
+    list-style: none;
     margin: 0;
+    padding: 0;
 }
 
 .navbar a {
-    color: white;
+    color: #213547;
     text-decoration: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.navbar a:hover {
+    background-color: rgba(231, 175, 0, 0.1);
+    color: #E7AF00;
 }
 
 /* Content Styles */
 .content {
-    padding-top: 60px; /* Keeps content below the navbar */
+    padding-top: 70px; /* Keeps content below the navbar */
     width: 100%;
     display: flex;
     justify-content: center;
@@ -205,27 +236,82 @@ button[type="submit"]:focus-visible {
     .form-section {
         grid-template-columns: 1fr;
     }
+
+    .navbar {
+        padding: 0 var(--spacing-md);
+    }
+
+    .navbar-content {
+        justify-content: space-between;
+    }
 }
 
-.app-container {
+@media (max-width: 480px) {
+    .navbar {
+        padding: 0 var(--spacing-sm);
+    }
+}
+
+.app {
+    display: flex;
     min-height: 100vh;
-    width: 100%;
-    background-color: #f8fafc;
+    width: 100vw;
 }
 
+/* Main Content Styles */
 .main-content {
-    padding-left: 250px; /* Adjust based on your navbar width */
-    min-height: 100vh;
-    transition: padding 0.3s ease;
+    padding-top: 70px; /* Height of navbar */
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.main-content.no-navbar {
-    padding-left: 0;
-}
-
-@media (max-width: 768px) {
+/* Remove old side navbar padding */
+@media screen and (min-width: 1440px) {
     .main-content {
-        padding-left: 1rem;
-        padding-right: 1rem;
+        margin: 0 auto;
+        padding: var(--spacing-lg);
+    }
+}
+
+/* Tablet (1024px and down) */
+@media screen and (max-width: 1024px) {
+    .main-content {
+        padding: var(--spacing-md);
+    }
+}
+
+/* Small Tablet (768px and down) */
+@media screen and (max-width: 768px) {
+    .main-content {
+        padding: var(--spacing-md);
+    }
+}
+
+/* Mobile (480px and down) */
+@media screen and (max-width: 480px) {
+    .main-content {
+        padding: var(--spacing-sm);
+    }
+}
+
+/* Handle zoom and scale */
+@media screen and (max-resolution: 150dpi) {
+    .main-content {
+        max-width: 100%;
+        margin: 0;
+    }
+}
+
+/* Print styles */
+@media print {
+    .main-content {
+        padding: 0;
+        margin: 0;
+        width: 100%;
     }
 }

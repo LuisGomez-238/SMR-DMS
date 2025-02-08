@@ -175,6 +175,7 @@ export const buyersService = {
         }
     },
 
+
     async uploadDocument(buyerId, file, documentType) {
         try {
             console.log('Starting document upload for buyer:', buyerId);
@@ -265,5 +266,16 @@ export const buyersService = {
             console.error('Error deleting document:', error);
             throw error;
         }
-    }
+    },
+
+    // Add new method to get total buyers count
+    async getAllBuyers() {
+        try {
+            const buyersSnapshot = await getDocs(collection(db, COLLECTION_NAME));
+            return buyersSnapshot.size;
+        } catch (error) {
+            console.error('Error getting total buyers:', error);
+            throw error;
+        }
+    },
 }; 

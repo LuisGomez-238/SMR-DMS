@@ -37,25 +37,18 @@ const Inventory = () => {
   const filteredInventory = inventory.filter((item) => {
     const searchString = searchTerm.toLowerCase();
     return (
-      item.make?.toLowerCase()?.includes(searchString) ||
-      false ||
-      item.model?.toLowerCase()?.includes(searchString) ||
-      false ||
-      item.vin?.toLowerCase()?.includes(searchString) ||
-      false
+      item.make?.toLowerCase().includes(searchString) ||
+      item.model?.toLowerCase().includes(searchString) ||
+      item.vin?.toLowerCase().includes(searchString)
     );
   });
 
   const sortedInventory = [...filteredInventory].sort((a, b) => {
     switch (sortBy) {
       case "newest":
-        return (
-          new Date(b.createdAt?.toDate()) - new Date(a.createdAt?.toDate()) || 0
-        );
+        return new Date(b.createdAt?.toDate()) - new Date(a.createdAt?.toDate());
       case "oldest":
-        return (
-          new Date(a.createdAt?.toDate()) - new Date(b.createdAt?.toDate()) || 0
-        );
+        return new Date(a.createdAt?.toDate()) - new Date(b.createdAt?.toDate());
       case "priceHigh":
         return (b.price || 0) - (a.price || 0);
       case "priceLow":
@@ -66,21 +59,18 @@ const Inventory = () => {
   });
 
   return (
-    <>
+    <div className="inventory-container">
       <Navbar />
-      <div className="dashboard-container">
-        <main className="main-content">
-          <div className="inventory-header">
-            <div className="header-title">
-              <h1>Inventory</h1>
-              <p>Manage your vehicle inventory</p>
-            </div>
+      <main className="main-content">
+        <div className="inventory-header">
+          <div className="header-title">
+            <h1>Inventory</h1>
+            <p>Manage your vehicle inventory</p>
           </div>
 
           <div className="inventory-controls">
-            <div>
+            <div className="search-bar">
               <input
-                className="search-bar"
                 type="text"
                 placeholder="Search inventory..."
                 value={searchTerm}
@@ -93,7 +83,7 @@ const Inventory = () => {
                 className="btn-filter"
                 onClick={() => setFilterOpen(!filterOpen)}
               >
-                <FunnelIcon className="icon filter-icon" />
+                <FunnelIcon className="icon" />
                 Filters
               </button>
 
@@ -107,6 +97,7 @@ const Inventory = () => {
                   <option value="priceHigh">Price: High to Low</option>
                   <option value="priceLow">Price: Low to High</option>
                 </select>
+                <ChevronDownIcon className="dropdown-icon" />
               </div>
             </div>
           </div>
@@ -157,11 +148,7 @@ const Inventory = () => {
                         ${(item.price || 0).toLocaleString()}
                       </span>
                       <span
-                        className={`status-badge ${
-                          item.status === "available"
-                            ? "available"
-                            : item.status || "unknown"
-                        }`}
+                        className={`status-badge ${item.status || "unknown"}`}
                       >
                         {item.status || "unknown"}
                       </span>
@@ -176,9 +163,9 @@ const Inventory = () => {
               )}
             </div>
           )}
-        </main>
-      </div>
-    </>
+        </div>
+      </main>
+    </div>
   );
 };
 

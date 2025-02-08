@@ -1,12 +1,14 @@
 .buyers-container {
-    padding: 6rem 2rem 2rem 2rem;
     min-height: 100vh;
     background-color: #f8fafc;
+    width: 100vw;
 }
 
 .buyers-header {
-    max-width: 1200px;
-    margin: 0 auto 2rem;
+    margin-bottom: 2rem;
+    width: 90vw;
+    margin-top: 2rem;
+    margin-left: 2rem;
 }
 
 .header-content {
@@ -24,6 +26,7 @@
 
 .search-bar {
     margin-bottom: 1.5rem;
+    width: 20vw;
 }
 
 .search-bar input {
@@ -42,16 +45,15 @@
 }
 
 .buyers-table-container {
-    max-width: 1200px;
-    margin: 0 auto;
     background: white;
     border-radius: 0.75rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+    width: 90vw;
+    margin-left: 2rem;
 }
 
 .buyers-table {
-    width: 100%;
+    width: 90vw;
     border-collapse: collapse;
 }
 
