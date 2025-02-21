@@ -89,139 +89,93 @@ const Sellers = () => {
     });
 
     return (
-        <div className='sellers-container'>
-            <Navbar />
-            <div className="dashboard-container">
-                <main className="main-content">
-                    <div className="sellers-header">
-                        <div className="header-title">
-                            <h1>Sellers</h1>
-                            <p>Manage and view all sellers</p>
-                        </div>
-                        <button 
-                            className="btn-primary"
-                            onClick={() => navigate('/sellers/new')}
-                        >
-                            <UserPlusIcon className="icon" />
-                            Add New Seller
-                        </button>
-                    </div>
+        <div className="sellers-container">
+            <div className="sellers-header">
+                <div className="header-content">
+                    <h1>Sellers</h1>
+                    <button 
+                        className="btn-primary"
+                        onClick={() => navigate('/sellers/new')}
+                    >
+                        <UserPlusIcon className="icon" />
+                        Add New Seller
+                    </button>
+                </div>
+                <div className="search-bar">
+                    <input
+                        type="text"
+                        placeholder="Search sellers..."
+                        value={searchTerm}
+                        onChange={handleSearch}
+                    />
+                </div>
+            </div>
 
-                    <div className="sellers-controls">
-                        <div className="search-bar">
-                            <input
-                                type="text"
-                                placeholder="Search sellers..."
-                                value={searchTerm}
-                                onChange={handleSearch}
-                            />
-                        </div>
+            {error && <div className="error-message">{error}</div>}
 
-                        <div className="controls-right">
-                            <button 
-                                className="btn-filter"
-                                onClick={() => setFilterOpen(!filterOpen)}
-                            >
-                                <FunnelIcon className="icon" />
-                                Filters
-                            </button>
-
-                            <div className="sort-dropdown">
-                                <select 
-                                    value={sortBy}
-                                    onChange={(e) => setSortBy(e.target.value)}
+            <div className="sellers-table-container">
+                <table className="sellers-table">
+                    <thead>
+                        <tr>
+                            <th>Business Name</th>
+                            <th>Contact</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Date Added</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {sortedSellers.length === 0 ? (
+                            <tr>
+                                <td colSpan="6" className="no-results">
+                                    No sellers found
+                                </td>
+                            </tr>
+                        ) : (
+                            sortedSellers.map(seller => (
+                                <tr 
+                                    key={seller.id}
+                                    onClick={() => handleRowClick(seller.id)}
+                                    className="clickable-row"
                                 >
-                                    <option value="newest">Newest First</option>
-                                    <option value="oldest">Oldest First</option>
-                                    <option value="alphabetical">A-Z</option>
-                                    <option value="listings">Most Listings</option>
-                                </select>
-                                <ChevronDownIcon className="dropdown-icon" />
-                            </div>
-                        </div>
-                    </div>
-
-                    {filterOpen && (
-                        <div className="filters-panel">
-                            <div className="filter-group">
-                                <label>Status</label>
-                                <div className="filter-options">
-                                    <label className="checkbox-label">
-                                        <input type="checkbox" /> Active
-                                    </label>
-                                    <label className="checkbox-label">
-                                        <input type="checkbox" /> Inactive
-                                    </label>
-                                    <label className="checkbox-label">
-                                        <input type="checkbox" /> Pending
-                                    </label>
-                                </div>
-                            </div>
-                            {/* Add more filter groups as needed */}
-                        </div>
-                    )}
-
-                    <div className="sellers-table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Business Name</th>
-                                    <th>Contact</th>
-                                    <th>Location</th>
-                                    <th>Status</th>
-                                    <th>Date Added</th>
-                                    <th></th>
+                                    <td className="business-name">
+                                        {seller.businessName}
+                                    </td>
+                                    <td>
+                                        <div className="contact-info">
+                                            <span>{seller.contactName}</span>
+                                            <span className="secondary-text">{seller.email}</span>
+                                        </div>
+                                    </td>
+                                    <td>{`${seller.city}, ${seller.state}`}</td>
+                                    <td>
+                                        <span className={`status-badge ${seller.status || 'active'}`}>
+                                            {seller.status || 'active'}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {seller.createdAt ? 
+                                            new Date(seller.createdAt.toDate()).toLocaleDateString() 
+                                            : 'N/A'
+                                        }
+                                    </td>
+                                    <td>
+                                        <button 
+                                            className="btn-icon"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                // Add your action menu logic here
+                                            }}
+                                        >
+                                            <EllipsisVerticalIcon className="icon" />
+                                        </button>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {sortedSellers.map(seller => (
-                                    <tr 
-                                        key={seller.id}
-                                        onClick={() => handleRowClick(seller.id)}
-                                        className="clickable-row"
-                                    >
-                                        <td className="business-name">
-                                            {seller.businessName}
-                                        </td>
-                                        <td>
-                                            <div className="contact-info">
-                                                <span>{seller.contactName}</span>
-                                                <span className="secondary-text">{seller.email}</span>
-                                            </div>
-                                        </td>
-                                        <td>{`${seller.city}, ${seller.state}`}</td>
-                                        <td>
-                                            <span className={`status-badge ${seller.status || 'active'}`}>
-                                                {seller.status || 'active'}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            {seller.createdAt ? 
-                                                new Date(seller.createdAt.toDate()).toLocaleDateString() 
-                                                : 'N/A'
-                                            }
-                                        </td>
-                                        <td>
-                                            <button 
-                                                className="btn-icon"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    // Add your action menu logic here
-                                                }}
-                                            >
-                                                <EllipsisVerticalIcon className="icon" />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div className="pagination">
-                        {/* Add pagination controls here */}
-                    </div>
-                </main>
+                            ))
+                        )}
+                    </tbody>
+                </table>
             </div>
         </div>
     );

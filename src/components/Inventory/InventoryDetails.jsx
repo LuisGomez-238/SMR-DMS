@@ -181,24 +181,7 @@ const InventoryDetails = () => {
     if (!inventory) return <div className="error-message">Inventory not found</div>;
 
     return (
-        <>
-            <Navbar />
-            <div className={`navigation-header ${isScrolled ? 'scrolled' : ''}`}>
-                <div className="navigation-container">
-                    <div className="navigation-buttons">
-                        <Link 
-                            to="/inventory" 
-                            className="back-button"
-                            title="Back to Inventory"
-                        >
-                            <ArrowLeftIcon />
-                            <span>Back to Inventory</span>
-                        </Link>
-                    </div>
-                </div>
-            </div>
-
-            <div className="inventory-details-container">
+        <div className="inventory-details-container">
                 <div className="navigation-buttons">
                     <Link 
                         to="/inventory" 
@@ -321,8 +304,6 @@ const InventoryDetails = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-
             <button 
                 className={`scroll-to-top ${showScrollTop ? 'visible' : ''}`}
                 onClick={scrollToTop}
@@ -330,7 +311,7 @@ const InventoryDetails = () => {
             >
                 <ArrowUpIcon className="h-5 w-5" />
             </button>
-        </>
+        </div>
     );
 };
 
